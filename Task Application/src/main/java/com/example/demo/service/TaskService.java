@@ -2,12 +2,17 @@ package com.example.demo.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Comment;
+import com.example.demo.entity.CommentDto;
 import com.example.demo.entity.Task;
+import com.example.demo.entity.TaskDto;
 import com.example.demo.entity.TaskPriority;
 import com.example.demo.entity.TaskStatus;
 import com.example.demo.entity.User;
@@ -22,6 +27,9 @@ public class TaskService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 			
 	public Optional<Task> getTasksByUserId(Long userId) {
         return taskRepository.findById(userId);
@@ -71,5 +79,33 @@ public class TaskService {
 			return taskRepository.findByStatus(status);
 		}
 		return taskRepository.findAll(); // Return all tasks if no filters are applied
+	}
+	
+	//fetch tasks with comments
+	public TaskDto convertToDto(Task task) {
+		// Convert Task entity to TaskDTO
+		TaskDto taskDto = modelMapper.map(task, TaskDto.class);
+		
+		// Manually map comments list, as ModelMapper can't map nested lists by default
+		taskDto.setComments(task.getComments().stream()
+				.map(this::convertToCommentDto)
+				.collect(Collectors.toList())
+				);
+		
+		return taskDto;
+	}
+	
+	//fetch tasks with comments
+	private CommentDto convertToCommentDto(Comment comment) {
+		// Convert Comment entity to CommentDTO
+		CommentDto commentDto = modelMapper.map(comment, CommentDto.class);
+		
+		// Set the userName manually since it's not directly mapped in the CommentDTO
+		User user = comment.getUser();
+		if(user != null) {
+			commentDto.setUserName(user.getName());
+		}
+		
+		return commentDto;
 	}
 }

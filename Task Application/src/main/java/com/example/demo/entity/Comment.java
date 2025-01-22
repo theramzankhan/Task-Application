@@ -2,6 +2,8 @@ package com.example.demo.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -18,12 +20,14 @@ public class Comment {
 	
 	@ManyToOne
 	@JoinColumn(name = "task_id", nullable = false)
+	@JsonIgnore // did this because after id, message, task array of array was coming and then created at single then again user array of array as json response which is not correct
 	private Task task;
 	
 	private LocalDateTime createdAt;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
+	@JsonIgnore
 	private User user;
 
 	public Long getId() {

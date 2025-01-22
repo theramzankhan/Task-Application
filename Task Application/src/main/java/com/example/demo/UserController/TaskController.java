@@ -1,6 +1,7 @@
 package com.example.demo.UserController;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Task;
+import com.example.demo.entity.TaskDto;
 import com.example.demo.entity.TaskPriority;
 import com.example.demo.entity.TaskStatus;
 import com.example.demo.repository.TaskRepository;
@@ -28,6 +30,9 @@ public class TaskController {
 	
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private TaskRepository taskRepository;
 	
 	@PostMapping
     public ResponseEntity<Task> createTask(@PathVariable Integer userId, @RequestBody Task task) {
@@ -72,5 +77,16 @@ public class TaskController {
     		) {
     	List<Task> tasks = taskService.filterTasks(priority, status);
     	return ResponseEntity.ok(tasks);
+    }
+    
+    //fetch tasks with comments
+    @GetMapping("{taskId}")
+    public TaskDto getTaskWithComments(@PathVariable Long taskId) {
+    	Optional<Task> task = taskRepository.findById(taskId);
+    	if(task.isPresent()) {
+    		return taskService.convertToDto(task.get());
+    	} else {
+    		throw new RuntimeException("Task not found for id: " + taskId);
+    	}
     }
 }
