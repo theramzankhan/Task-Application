@@ -89,4 +89,18 @@ public class TaskController {
     		throw new RuntimeException("Task not found for id: " + taskId);
     	}
     }
+    
+    // Star or unstar a task
+    @PutMapping("/{taskId}/star")
+    public ResponseEntity<Task> toggleStarTask(@PathVariable Long taskId, @RequestParam boolean starred) {
+    	Task task = taskService.toggleStarTask(taskId, starred);
+    	return ResponseEntity.ok(task);
+    }
+    
+    // Get all starred tasks for a user
+    @GetMapping("/starred")
+    public ResponseEntity<List<Task>> getStarredTasks(@PathVariable Integer userId) {
+    	List<Task> tasks = taskService.getStarredTasks(userId);
+    	return ResponseEntity.ok(tasks);
+    }
 }

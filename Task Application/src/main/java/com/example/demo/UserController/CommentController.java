@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.CommentRequest;
+import com.example.demo.service.CommentReactionService;
 import com.example.demo.service.CommentService;
 
 import jakarta.validation.Valid;
@@ -24,6 +25,9 @@ public class CommentController {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	@Autowired
+	private CommentReactionService commentReactionService;
 	
 //	@PostMapping("/task/{taskId}")
 //	public ResponseEntity<Comment> addComment(
@@ -49,5 +53,25 @@ public class CommentController {
 		List<Comment> comments = commentService.getCommentByTask(taskId);
 		return ResponseEntity.ok(comments);
 	}
-
+	
+	@PostMapping("/{commentId}/like")
+	public ResponseEntity<Comment> likeComent(@PathVariable Long commentId) {
+		return ResponseEntity.ok(commentService.likeComment(commentId));
+	}
+	
+	@PostMapping("/{id}/dislike")
+	public ResponseEntity<Comment> dislikeComment(@PathVariable Long id) {
+		return ResponseEntity.ok(commentService.dislikeComment(id));
+	}
+	
+	@PostMapping("/{commentId}/react")
+	public ResponseEntity<Void> reactToComment(
+			@PathVariable Long commentId,
+			@RequestParam Integer userId,
+			@RequestParam boolean liked
+			) {
+		commentReactionService.reactToComment(commentId, userId, liked);
+		return ResponseEntity.ok().build();
+	}
+ 
 }

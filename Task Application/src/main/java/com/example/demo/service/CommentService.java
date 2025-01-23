@@ -41,5 +41,18 @@ public class CommentService {
 	public List<Comment> getCommentByTask(Long taskId) {
 		return commentRepository.findByTaskId(taskId);
 	}
+	
+	
+	public Comment likeComment(Long commentId) {
+		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+		comment.setLikes(comment.getLikes() + 1); //increment likes counter
+		return commentRepository.save(comment);
+	}
+	
+	public Comment dislikeComment(Long commentId) {
+		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+		comment.setDislikes(comment.getDislikes() + 1);
+		return commentRepository.save(comment);
+	}
 
 }

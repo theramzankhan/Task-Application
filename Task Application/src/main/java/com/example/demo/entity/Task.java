@@ -32,6 +32,9 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;  // PENDING, IN_PROGRESS, COMPLETED (status of the task)
     
+    // New field to indicate if the task is starred
+    private boolean starred;
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
@@ -102,6 +105,14 @@ public class Task {
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+
+	public boolean isStarred() {
+		return starred;
+	}
+
+	public void setStarred(boolean starred) {
+		this.starred = starred;
 	}
 
 	

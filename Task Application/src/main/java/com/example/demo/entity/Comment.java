@@ -29,6 +29,9 @@ public class Comment {
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonIgnore
 	private User user;
+	
+	private int likes = 0; //Default value
+	private int dislikes = 0;
 
 	public Long getId() {
 		return id;
@@ -68,6 +71,22 @@ public class Comment {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
 	}
 	
 }

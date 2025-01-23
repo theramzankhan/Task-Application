@@ -108,4 +108,19 @@ public class TaskService {
 		
 		return commentDto;
 	}
+	
+	
+	// Star or unstar a task
+	public Task toggleStarTask(Long taskId, boolean starred) {
+		Task task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Task id not found : " + taskId));
+		task.setStarred(starred);
+		return taskRepository.save(task);
+	}
+	
+	// Get all starred tasks for a user
+	public List<Task> getStarredTasks(Integer userId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id " + userId));
+		List<Task> starredTasks = taskRepository.findByUserAndStarred(user, true);
+		return starredTasks;
+	}
 }
