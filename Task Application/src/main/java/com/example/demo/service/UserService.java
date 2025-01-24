@@ -6,8 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.TaskPriority;
-import com.example.demo.entity.UserStatus;
+import com.example.demo.EncriptDecript;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 
@@ -16,6 +15,9 @@ public class UserService {
 	
 	@Autowired
     private UserRepository userRepository;
+	
+	@Autowired
+	private EncriptDecript encription;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -26,6 +28,12 @@ public class UserService {
     }
 
     public User saveUser(User user) {
+    	// Encrypt the password before saving
+    	String originalPassword = user.getPassword();
+    	String encryptedPassword = encription.encrypt(originalPassword);
+    	user.setPassword(encryptedPassword);
+    	
+    	// Save the user with the encrypted password
         return userRepository.save(user);
     }
 

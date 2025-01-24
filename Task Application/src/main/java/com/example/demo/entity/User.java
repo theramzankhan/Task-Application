@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import java.util.List;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,9 +19,7 @@ public class User {
     private Integer id;
     private String name;
     private String email;
-    
-    @Enumerated(EnumType.STRING)
-    private UserStatus status; // Enum for User's Status
+    private String password;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> tasks;
@@ -52,14 +49,21 @@ public class User {
         this.email = email;
     }
 
-
-	public UserStatus getStatus() {
-		return status;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setStatus(UserStatus status) {
-		this.status = status;
+	public void setPassword(String password) {
+		this.password = password;
 	}
+
+//	public UserStatus getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(UserStatus status) {
+//		this.status = status;
+//	}
 
 	public List<Task> getTasks() {
 		return tasks;

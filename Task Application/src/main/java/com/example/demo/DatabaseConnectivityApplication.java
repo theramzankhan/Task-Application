@@ -14,3 +14,11 @@ public class DatabaseConnectivityApplication {
 	}
 
 }
+
+
+//NEW TASKS TO BE DONE
+//1. Make userdto class and show bio, location, etc with name, email, etc
+//2. add validations in fields
+//3. add loggings
+//4. make a file where to declare constants variables
+//5. try login using session (HttpServlet)
