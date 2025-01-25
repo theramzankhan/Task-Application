@@ -21,6 +21,9 @@ public class User {
     private String email;
     private String password;
     
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+    
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> tasks;
 
@@ -57,13 +60,13 @@ public class User {
 		this.password = password;
 	}
 
-//	public UserStatus getStatus() {
-//		return status;
-//	}
-//
-//	public void setStatus(UserStatus status) {
-//		this.status = status;
-//	}
+	public UserStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserStatus status) {
+		this.status = status;
+	}
 
 	public List<Task> getTasks() {
 		return tasks;

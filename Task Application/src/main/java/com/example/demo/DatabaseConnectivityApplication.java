@@ -22,3 +22,7 @@ public class DatabaseConnectivityApplication {
 //3. add loggings
 //4. make a file where to declare constants variables
 //5. try login using session (HttpServlet)
+//6. Make status field as boolean ACTIVE or INACTIVE - done
+//7. Pagination
+//8. Searching - done
+//9. Comment delete, update, etc and all operations
