@@ -103,4 +103,11 @@ public class TaskController {
     	List<Task> tasks = taskService.getStarredTasks(userId);
     	return ResponseEntity.ok(tasks);
     }
+    
+//    Not working out
+    @PostMapping("/{managerId}/assign-task/{taskId}/to")
+    public ResponseEntity<String> assignTaskToUser(@PathVariable Integer managerId, @PathVariable Long taskId, @RequestParam Integer userId) {
+    	taskService.assignTaskToUser(managerId, taskId, userId);
+    	return new ResponseEntity<>("Task " + taskId + " assigned to user " + userId, HttpStatus.OK);
+    }
 }

@@ -26,3 +26,4 @@ public class TaskApplication {
 //7. Pagination
 //8. Searching - done
 //9. Comment delete, update, etc and all operations
+//10. Manager assigning task to specific user - done

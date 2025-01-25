@@ -16,6 +16,7 @@ import com.example.demo.entity.TaskDto;
 import com.example.demo.entity.TaskPriority;
 import com.example.demo.entity.TaskStatus;
 import com.example.demo.entity.User;
+import com.example.demo.entity.UserStatus;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
 
@@ -122,5 +123,25 @@ public class TaskService {
 		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id " + userId));
 		List<Task> starredTasks = taskRepository.findByUserAndStarred(user, true);
 		return starredTasks;
+	}
+	
+	public void assignTaskToUser(Integer managerId, Long taskId, Integer userId) {
+		// Ensure manager role and assign task logic
+		User manager = userRepository.findById(managerId).orElseThrow(() -> new RuntimeException("Manager not found"));
+		if(!"MANAGER".equals(manager.getRole().getName().trim().toUpperCase())) {
+			throw new RuntimeException("Only managers can assign tasks");
+		}
+		
+		// Ensure the user is active before assigning task
+		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+		if(user.getStatus() == UserStatus.INACTIVE) {
+			throw new RuntimeException("Cannot assign task to an inactive user");
+		}
+		
+		// Assign the task to the user
+		Task task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Task not found"));
+		
+		task.setUser(user);
+		taskRepository.save(task);
 	}
 }
