@@ -15,7 +15,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 //	List<User> findByPriority(TaskPriority taskPriority);
 	List<User> findByStatus(UserStatus userStatus);
-	Optional<User> findById(Long id);
+	Optional<User> findById(Integer id);
+	User findByName(String name);
 	
 	@Query(value = "SELECT * FROM user " +
 				   "WHERE LOWER(name) LIKE LOWER(CONCAT('%', :keyword, '%'))" +

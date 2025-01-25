@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class DatabaseConnectivityApplication {
+public class TaskApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DatabaseConnectivityApplication.class, args);
+		SpringApplication.run(TaskApplication.class, args);
 		System.out.println("Hello!");
 	}
 

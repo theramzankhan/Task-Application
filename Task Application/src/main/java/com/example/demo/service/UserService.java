@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.EncriptDecript;
+import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.entity.UserStatus;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 
 @Service
@@ -19,6 +21,9 @@ public class UserService {
 	
 	@Autowired
 	private EncriptDecript encription;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -36,6 +41,12 @@ public class UserService {
     	
     	//Set user status as ACTIVE by default when user is being created
     	user.setStatus(UserStatus.ACTIVE);
+    	
+    	//Set default role as "USER"
+    	if(user.getRole() == null) {
+    		Role userRole = roleRepository.findByName("USER");
+    		user.setRole(userRole);
+    	}
     	
     	// Save the user with the encrypted password
         return userRepository.save(user);
@@ -58,6 +69,21 @@ public class UserService {
     
     public List<User> getUserByStatus(UserStatus status) {
     	return userRepository.findByStatus(status);
+    }
+    
+    public User assignRoleToUser(Integer userId, String roleName) {
+    	// Fetch the user from the database
+    	User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    	
+    	// Fetch the role by name
+    	Role role = roleRepository.findByName(roleName);
+    	if(role == null) {
+    		throw new RuntimeException("Role not found");
+    	}
+    	// Assign the role to the user and save
+    	user.setRole(role);
+    	
+    	return userRepository.save(user);
     }
 }
 

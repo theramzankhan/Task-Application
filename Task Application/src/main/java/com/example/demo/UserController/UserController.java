@@ -19,6 +19,7 @@ import com.example.demo.EncriptDecript;
 import com.example.demo.entity.TaskPriority;
 import com.example.demo.entity.User;
 import com.example.demo.entity.UserStatus;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
 @RestController
@@ -30,6 +31,9 @@ public class UserController {
 	    
 	    @Autowired
 	    private EncriptDecript encriptDecript;
+	    
+	    @Autowired
+	    private UserRepository userRepository;
 
 	    @GetMapping
 	    public List<User> getAllUsers() {
@@ -79,6 +83,19 @@ public class UserController {
 	    @GetMapping("/decrypt-password/{userId}")
 	    public String decryptPassword(@PathVariable Integer userId) {
 	        return "Decrypted Password: " + encriptDecript.decryptPassword(userId);
+	    }
+	    
+	    @PostMapping("/{adminId}/assign-role/{userId}")
+	    public String assignRoleToUser(@PathVariable Integer adminId, @PathVariable Integer userId, @RequestParam String roleName) {
+	    	// Ensure that only admins can assign roles
+	    	 User adminUser = userRepository.findById(adminId).orElseThrow(() -> new RuntimeException("Useer not found"));
+	    	 System.out.println("Admin Role: " + adminUser.getRole().getName());
+	    	 if(!"ADMIN".equals(adminUser.getRole().getName().trim().toUpperCase())) {
+	    		 throw new RuntimeException("Only admins can assign roles");
+	    	 }
+	    	 
+	    	 userService.assignRoleToUser(userId, roleName);
+	    	 return "Role " + roleName + " assigned to user " + userId;
 	    }
 
 }
